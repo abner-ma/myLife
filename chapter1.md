@@ -20,5 +20,5 @@ Linux支持多种语言，默认的字符编码为en\_US.UTF-8，可以通过loc
 
 ## Linux的命令行操作快捷键
 
-![](/assets/3.png)
+![](/assets/3.png)可以通过man bash查看
 
