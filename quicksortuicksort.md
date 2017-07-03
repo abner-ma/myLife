@@ -154,7 +154,54 @@ int main()
     }
      
     return 0;
-}/*参考数据结构p274(清华大学出版社，严蔚敏)*/
+}
+```
+
+---
+
+## 使用STL
+cpp的STL中有个sort函数，是实现全排序的，有较好的排序效率，使用过程可参考如下代码：
+```
+#include <iostream>
+#include <vector>
+#include <algorithm>
+
+using namespace std;
+
+class compare
+{
+        public:
+                bool operator()(const int &x,const int &y)
+                {
+                        return x<y;
+                };
+};
+
+int main()
+{
+        vector<int> v;
+        compare cmp;
+        int n;
+        int temp;
+        cin >> n;
+        for(int j=1;j<=n;j++)
+        {
+                cin >> temp;
+                int i;
+                int temp1;
+                for(i=1;i<=temp;i++)
+                {
+                        cin >> temp1;
+                        v.push_back(temp1);
+                }
+                sort(v.begin(),v.end(),cmp);
+                for(i=0;i<temp-1;i++)
+                        cout<<v[i]<<" ";
+                cout << v[temp-1]<<endl;
+                v.clear();
+        }
+        return 0;
+}
 ```
 
 ---
