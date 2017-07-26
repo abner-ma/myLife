@@ -155,3 +155,10 @@ function! SvnRunBat()
     silent !D:\putty\svnrun.bat & PAUSE
 endfunction 
 nmap <F5> :call SvnRunBat()<CR> 
+
+"F7加载NERDTree
+nmap <F7> :NERDTreeToggle<CR>
+
+"CtrlP的起始目录
+let g:ctrlp_working_path_mode = 'ra'
+let g:ctrlp_root_markers = ['*.spec']
