@@ -94,12 +94,48 @@ function MyDiff()
   endif
 endfunction
 
+"启动后最大化 
+au GUIEnter * simalt ~x 
+"行高亮 
+set cursorline
+
+"文件编码
+set fileencoding=gb2312
+"内部编码
+set encoding=cp936
+"设定字符集
+set fileencodings=utf-8,cp936,latin-1
+
+"不产生备份文件
 set nobackup
 set noundofile
 
+"打开文件类型检测
+filetype plugin indent on
+
+"打开折叠功能
+set fdm=syntax
+
 syntax enable
-set background=dark
 colorscheme solarized
+set background=light
+
+"F2切换背景
+function! UpdateSolarizedColor()
+	let temp = &background
+	if temp=="light"
+		set background=dark
+	else
+		set background=light
+	endif
+endfunction
+nmap <F2> :call UpdateSolarizedColor()<CR>
+
+"F3打开配置文件
+function! OpenVimrc()
+	gvim $VIM\_vimrc
+endfunction
+nmap <F3> :call OpenVimrc()<CR>
 
 "让vim首先在当前目录里寻找tags文件，所以要加分号，如果没有找到tags文件，或者没有找到对应的目标，就到父目录中查找，一直向上递归
 set tags=D:\vimproject\ctags;tags;
