@@ -105,6 +105,14 @@ set fileencoding=gb2312
 set encoding=cp936
 "设定字符集
 set fileencodings=utf-8,cp936,latin-1
+"设置tab代表4个空格
+set tabstop=4
+"编辑模式的时候按退格键的时候退回缩进的长度
+set softtabstop=4
+"表示每一级缩进的长度
+set shiftwidth=4
+"设置成 expandtab 时，缩进用空格来表示
+set expandtab
 
 "不产生备份文件
 set nobackup
@@ -183,6 +191,7 @@ let Tlist_Ctags_Cmd = '"' . $VIMRUNTIME . '\ctags\ctags"'
 let Tlist_Use_Right_Window=1
 let Tlist_Inc_Winwidth=0
 let Tlist_Auto_Open = 1
+let Tlist_File_Fold_Auto_Close=1
 let Tlist_Exit_OnlyWindow = 1
 nnoremap <silent> <F8> :TlistToggle<CR>
 
