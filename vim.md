@@ -60,6 +60,7 @@ vundle是用于管理vim插件的一个工具，使用它是可以方便的从gi
 ---
 
 ## 我的win下gVim配置
+'''
 source $VIMRUNTIME/vimrc_example.vim
 source $VIMRUNTIME/mswin.vim
 behave mswin
@@ -207,3 +208,4 @@ nmap <F7> :NERDTreeToggle<CR>
 "CtrlP的起始目录
 let g:ctrlp_working_path_mode = 'ra'
 let g:ctrlp_root_markers = ['*.spec']
+'''
