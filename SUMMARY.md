@@ -5,3 +5,6 @@
 * [Perf知识](perf.md)
 * [Stock](stock.md)
 * [Quicksort](quicksortuicksort.md)
+* [Bonding](bond.md)
+* [Vim](vim.md)
+
