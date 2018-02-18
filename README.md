@@ -2,7 +2,7 @@
 
 **2017年5月18日夜**，为_用技术记录人生_，开始了gitbook的探索。
 
-我的github：[abner-ma.github.io](/abner-ma.github.io)
+我的github：[abner-ma.github.io](https://abner-ma.github.io/)
 
 ---
 
