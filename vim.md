@@ -213,3 +213,161 @@ let g:ctrlp_root_markers = ['*.spec']
 ```
 
 ---
+
+## 我的最新Vim配置
+
+```
+"不产生备份文件
+set nobackup
+set noundofile
+
+"启动后最大化
+au GUIEnter * simalt ~x
+
+"设置行高亮
+set cursorline
+
+"文件编码
+set fileencoding=utf-8
+"内部编码,linux下显示中文设置utf-8
+set encoding=cp936
+"设定字符集
+set fileencodings=utf-8,cp936,latin-1
+
+"设置文件格式为unix
+set fileformats=unix
+
+"设置tab代表4个空格
+set tabstop=4
+"编辑模式时退格键退回缩进的长度
+set softtabstop=4
+"每一级缩进的长度
+set shiftwidth=4
+"设置成expandtab时，缩进用空格表示
+set expandtab
+
+"打开文件类型检测
+filetype plugin indent on
+
+"打开折叠功能
+set fdm=syntax
+
+"设置是用solarized8配色方案
+colorscheme solarized8
+set background=light
+
+"F2切换背景
+function! UpdateSolarizedColor()
+	let temp = &background
+	if temp=="light"
+		set background=dark
+	else
+		set background=light
+	endif
+endfunction
+nmap <F2> :call UpdateSolarizedColor()<CR>
+
+"F3打开配置文件
+function! OpenVimrc()
+	gvim $VIM\_vimrc
+endfunction
+nmap <F3> :call OpenVimrc()<CR>
+
+"Ctrl + F4 删除文件换行
+function! DeleteFileEnd()
+    %s/\r//g
+endfunction
+nmap <C-F4> :call DeleteFileEnd()<CR>
+
+" 显示状态行当前设置
+set statusline
+
+" 设置状态行显示常用信息
+" %F 完整文件路径名
+" %m 当前缓冲被修改标记
+" %m 当前缓冲只读标记
+" %h 帮助缓冲标记
+" %w 预览缓冲标记
+" %Y 文件类型
+" %b ASCII值
+" %B 十六进制值
+" %l 行数
+" %v 列数
+" %p 当前行数占总行数的的百分比
+" %L 总行数
+" %{...} 评估表达式的值，并用值代替
+" %{"[fenc=".(&fenc==""?&enc:&fenc).((exists("+bomb") && &bomb)?"+":"")."]"} 显示文件编码
+" %{&ff} 显示文件类型
+set statusline=%F%m%r%h%w%=\ [ft=%Y]\ %{\"[fenc=\".(&fenc==\"\"?&enc:&fenc).((exists(\"+bomb\")\ &&\ &bomb)?\"+\":\"\").\"]\"}\ [ff=%{&ff}]\ [asc=%03.3b]\ [hex=%02.2B]\ [pos=%04l,%04v][%p%%]\ [LN=%L]
+
+" 设置 laststatus = 0 ，不显式状态行
+" 设置 laststatus = 1 ，仅当窗口多于一个时，显示状态行
+" 设置 laststatus = 2 ，总是显式状态行
+set laststatus=2
+
+"设置F7快捷键功能，使得在VIM右侧打开文件浏览,linux 下为20Vexplore!
+nmap <F7> :20Lexplore!<CR>
+
+"设置Netrw的list的格式
+let g:netrw_liststyle = 3
+
+"因为tags文件中记录的路径总是相对于tags文件所在的路径，所以要使用第二个设置项来改变vim的当前目录。如果不加入这两个语句，那么有的宏定义，还有一些就找不到了
+set autochdir
+
+"ctags.exe放在$VIMRUNTIME目录下的ctags目录下.linux下为"/usr/bin/ctags"
+let Tlist_Ctags_Cmd = '"' . $VIMRUNTIME . '\ctags\ctags"' 
+let Tlist_Inc_Winwidth=0
+let Tlist_Exit_OnlyWindow = 1
+nnoremap <silent> <F8> :TlistToggle<CR>
+
+"设置项目路径,该路径后续可通过source导入文件修改
+let project_dir = "D:\\vimproject"
+"设置项目代码路径
+let g:project_src = ''.project_dir.'\*'
+"让vim首先在当前目录里寻找tags文件，所以要加分号，如果没有找到tags文件，或者没有找到对应的目标，就到父目录中查找，一直向上递归
+let g:project_tags = '' . project_dir . '\_vim\ctags'
+"tags需要使用set操作，但因为需要让其等于变量，所以使用let操作并加上&符号
+let &tags = ''.project_tags.';tags;'
+
+"F12生成/更新tags文件 
+function! UpdateTagsFile(f_dir)
+    let g:project_tags = '' . a:f_dir . '\_vim\ctags'
+    let &tags = ''.g:project_tags.';tags;'
+    let g:project_src = ''.a:f_dir.'\*'
+    let func_cmd = '!ctags -R --languages=c++ --langmap=c++:+.c -h --c++-kinds=+px --fields=+aiKSz --extras=+q -f '.g:project_tags.' '.g:project_src
+    execute func_cmd
+endfunction 
+nmap <F12> :call UpdateTagsFile(project_dir)<CR>
+
+"F11 生成/更新cscope文件
+function! UpdateCscopeFile(f_dir)
+	cs kill cscope.out 
+    "linux 下使用rm -f
+    let func_cmd = '!del /F /Q '.a:f_dir.'\_vim\cscope.out'
+    execute func_cmd
+    "linux 下使用rm -f
+    let func_cmd = '!del /F /Q '.a:f_dir.'\_vim\cscope.files'
+    execute func_cmd
+    "linux下使用'!find '.a:f_dir.' -name "*.[hc]*" >>
+    "'.a:f_dir.'/.vim/cscope.files'
+    let func_cmd = '!for /r '.a:f_dir.' \%i in (*.c *.cc *.h *.hh) do @echo \%i >> '.a:f_dir.'\_vim\cscope.files'
+    execute func_cmd
+    "linux下命令之间使用&&
+    let func_cmd = '!cd '.a:f_dir.'\_vim\ & cscope -Rbk -i '.a:f_dir.'\_vim\cscope.files'
+    execute func_cmd
+    let func_cmd = 'cs add '.a:f_dir.'\_vim\cscope.out'
+	execute func_cmd
+endfunction 
+nmap <F11> :call UpdateCscopeFile(project_dir)<CR> 
+
+"cscope的相关查找快捷键设置
+nmap <C-\>s :cs find s <C-R>=expand("<cword>")<CR><CR>
+nmap <C-\>g :cs find g <C-R>=expand("<cword>")<CR><CR>
+nmap <C-\>c :cs find c <C-R>=expand("<cword>")<CR><CR>
+nmap <C-\>t :cs find t <C-R>=expand("<cword>")<CR><CR>
+nmap <C-\>e :cs find e <C-R>=expand("<cword>")<CR><CR>
+nmap <C-\>f :cs find f <C-R>=expand("<cfile>")<CR><CR>
+nmap <C-\>i :cs find i ^<C-R>=expand("<cfile>")<CR>$<CR>
+nmap <C-\>d :cs find d <C-R>=expand("<cword>")<CR><CR>
+
+```
